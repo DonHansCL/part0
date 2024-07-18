@@ -1,0 +1,20 @@
+sequenceDiagram
+    participant user as Usuario
+    participant browser as Navegador
+    participant server as Servidor
+
+    user->>browser: Escribe nota y hace clic en "Save"
+    browser->>server: POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+    activate server
+    Note right of server: El servidor recibe la nueva nota y la guarda
+    server-->>browser: 201 Created (nueva nota guardada)
+    deactivate server
+    
+    Note right of browser: El navegador actualiza la lista de notas sin recargar la página
+
+    browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/data.json
+    activate server
+    server-->>browser: [{ "content": "HTML is easy", "date": "2023-1-1" }, { "content": "Nueva nota", "date": "2023-07-04" }, ...]
+    deactivate server
+
+    Note right of browser: El navegador ejecuta la función callback que renderiza las notas, incluyendo la nueva nota
